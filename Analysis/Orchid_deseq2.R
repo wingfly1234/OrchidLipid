@@ -1,4 +1,5 @@
 setwd("~/orchid_lipid/")
+# DEG analysis use DESeq2
 o <- read.csv("gene_count_matrix.csv", row.names ="gene_id" )   #gene_count_matrix.csv got from stringtie analysis
 library("DESeq2")#install.packages( "DESeq2" )
 countData <- as.matrix(o)
@@ -98,6 +99,8 @@ pheatmap(assay(rld)[rownames(assay(rld))
 colnames(assay(rld)) <- c("Flower rep1","Flower rep2","Flower rep3","Leaf rep1","Leaf rep2","Leaf rep3")
 
 
+#GO and KEGG Enrichment use clusterProfiler
+
 #source("https://bioconductor.org/biocLite.R")
 #BiocManager::install("clusterProfiler")
 library("clusterProfiler")
@@ -122,7 +125,6 @@ write.table(ego,"leaf_up_regulated.txt",sep="\t",quote=FALSE)
 write.table(dego,"leaf_down_regulated.txt",sep="\t",quote=FALSE)
 
 
-
 pca2ncbi <- read.delim("pha_plaza2ncbi",head=F)
 head(pca2ncbi)
 length(up)
@@ -145,7 +147,6 @@ write.table(fl_down,"flower_down_regulated_ID_ncbi_pid_keggid.txt",sep="\t",quot
 kk <- enrichKEGG(gene         = fl_up_kegg$kegg,
                  organism     = 'peq',
                  pvalueCutoff = 0.05 )
-
 head(kk)
 browseKEGG(kk, 'peq00062')
 browseKEGG(kk, 'peq00945')
@@ -160,8 +161,6 @@ browseKEGG(kk,'peq00940')
 browseKEGG(kk,'peq00480')
 browseKEGG(kk,'peq00360')
 browseKEGG(kk,'peq00500')
-
-
 write.table(kk,"flower_up_regulated_kegg_enrichment.txt",sep="\t",quote=FALSE)
 mkk <- enrichMKEGG(gene = fl_up_kegg$kegg,
                    organism = 'peq')
